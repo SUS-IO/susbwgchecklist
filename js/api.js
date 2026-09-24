@@ -6,7 +6,7 @@
    =========================================================== */
 
 // SETUP: paste your deployed Apps Script Web App URL here.
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyEddLbiFBXBcCKnluSh74Uzcyk0X9z1oIZxqM9bV7xJ_uASgiZGEqE_edTOKWZJpg5/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz6Hgt9w0h9eDJrcwUPoVqk0YhyoaD5TxFee97-KK67--SxIwI-M7Ju-FYBZouEXwDh/exec';
 
 const AUTH_KEY = 'iecbwg_auth';
 const SESSION_HOURS = 12;
