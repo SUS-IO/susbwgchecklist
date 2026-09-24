@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>IEC-BWG | SUS Inspection &amp; Awareness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginView" class="login-view">
+  <div class="login-card">
+    <div class="logo-slot lg" id="logoSlotLogin">LOGO</div>
+    <h1 class="login-title">IEC-BWG</h1>
+    <p class="login-sub">SUS Inspection &amp; Awareness Checklist</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required>
+      </div>
+      <span class="err" id="loginErr"></span>
+      <button type="submit" class="btn-primary" id="loginBtn">
+        <span id="loginBtnLabel">Log In</span>
+        <span id="loginSpinner" class="spinner" hidden></span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="appShell" class="app-shell" hidden>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo-slot" id="logoSlot">LOGO</div>
+        <div class="brand-text">
+          <h1>IEC-BWG</h1>
+          <p>SUS Inspection</p>
+        </div>
+      </div>
+      <div class="user-chip">
+        <div class="user-meta">
+          <span id="userName" class="user-name"></span>
+          <span id="userRole" class="user-role"></span>
+        </div>
+        <button type="button" id="logoutBtn" class="icon-btn" title="Log out" aria-label="Log out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="tabbar" id="tabbar">
+      <button type="button" class="tab-btn active" data-tab="newEntry">New Entry</button>
+      <button type="button" class="tab-btn" data-tab="myEntries">My Entries</button>
+      <button type="button" class="tab-btn" data-tab="allEntries">All Entries</button>
+      <button type="button" class="tab-btn" data-tab="admin" id="adminTabBtn" hidden>Admin</button>
+    </nav>
+  </header>
+
+  <main class="wrap" id="mainWrap">
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ======= NEW ENTRY / EDIT ======= -->
+    <section id="view-newEntry" class="tab-view">
+
+      <div class="edit-banner" id="editBanner" hidden>
+        <span>Editing entry <strong id="editingIdLabel"></strong> — only today's entries can be edited.</span>
+        <button type="button" id="cancelEditBtn" class="btn-ghost sm">Cancel</button>
+      </div>
+
+      <div class="saved-banner" id="savedBanner" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        <div>
+          <strong id="savedIdLabel"></strong>
+          <p>Entry saved. Form is now locked.</p>
+        </div>
+        <button type="button" id="newEntryBtn" class="btn-primary sm">New Entry</button>
+      </div>
+
+      <form id="entryForm" novalidate>
+        <fieldset id="entryFieldset">
+
+        <!-- A: General Information -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">A</span>
+            <div><h2>General Information</h2><p class="section-sub">Date &amp; time are captured automatically</p></div>
+          </div>
+
+          <div class="field">
+            <label>Date &amp; Time</label>
+            <input type="text" id="entryDateTime" readonly class="mono">
+          </div>
+
+          <div class="grid two">
+            <div class="field">
+              <label for="zoneSearch">Zone <span class="req">*</span></label>
+              <div class="ss-wrap" id="zoneSelect"></div>
+              <span class="err" data-for="zone"></span>
+            </div>
+            <div class="field">
+              <label for="wardSearch">Ward <span class="req">*</span></label>
+              <div class="ss-wrap" id="wardSelect"></div>
+              <span class="err" data-for="ward"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="bwgName">BWG Name <span class="req">*</span></label>
+            <input type="text" id="bwgName" required>
+            <span class="err" data-for="bwgName"></span>
+          </div>
+
+          <div class="field">
+            <label for="categorySearch">Category <span class="req">*</span></label>
+            <div class="ss-wrap" id="categorySelect"></div>
+            <span class="err" data-for="category"></span>
+          </div>
+
+          <div class="field" id="categoryOtherField" hidden>
+            <label for="categoryOther">Please specify <span class="req">*</span></label>
+            <input type="text" id="categoryOther">
+            <span class="err" data-for="categoryOther"></span>
+          </div>
+
+          <div class="grid two">
+            <div class="field">
+              <label for="contactPerson">Contact Person <span class="req">*</span></label>
+              <input type="text" id="contactPerson" required>
+              <span class="err" data-for="contactPerson"></span>
+            </div>
+            <div class="field">
+              <label for="mobile">Mobile <span class="req">*</span></label>
+              <input type="tel" id="mobile" inputmode="numeric" maxlength="10" required>
+              <span class="err" data-for="mobile"></span>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div class="field">
+              <label for="units">Units / Residents / Employees <span class="req">*</span></label>
+              <input type="number" id="units" min="0" step="1" required>
+              <span class="err" data-for="units"></span>
+            </div>
+            <div class="field">
+              <label for="wasteGenerated">Approx. Waste Generated (kg/day) <span class="req">*</span></label>
+              <input type="number" id="wasteGenerated" min="0" step="0.01" required>
+              <span class="err" data-for="wasteGenerated"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- B: Waste Segregation -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">B</span>
+            <div><h2>Waste Segregation</h2><p class="section-sub">Select all that apply</p></div>
+          </div>
+          <div class="check-grid" data-group="segregation">
+            <label class="check-pill"><input type="checkbox" value="Wet Waste"><span>Wet Waste</span></label>
+            <label class="check-pill"><input type="checkbox" value="Dry Waste"><span>Dry Waste</span></label>
+            <label class="check-pill"><input type="checkbox" value="Special Care Waste"><span>Special Care Waste</span></label>
+            <label class="check-pill"><input type="checkbox" value="Sanitary Waste"><span>Sanitary Waste</span></label>
+            <label class="check-pill"><input type="checkbox" value="In Separate Waste"><span>In Separate Waste</span></label>
+          </div>
+          <span class="err" data-for="segregation"></span>
+        </section>
+
+        <!-- C: Bin Availability -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">C</span>
+            <div><h2>Bin Availability</h2><p class="section-sub">Select all that apply</p></div>
+          </div>
+          <div class="check-grid" data-group="binAvailability">
+            <label class="check-pill"><input type="checkbox" value="Wet Bin"><span>Wet Bin</span></label>
+            <label class="check-pill"><input type="checkbox" value="Dry Bin"><span>Dry Bin</span></label>
+            <label class="check-pill"><input type="checkbox" value="Sanitary Bin"><span>Sanitary Bin</span></label>
+            <label class="check-pill"><input type="checkbox" value="Special Care Bin"><span>Special Care Bin</span></label>
+            <label class="check-pill"><input type="checkbox" value="Labels Available / Colour Label"><span>Labels Available / Colour Label</span></label>
+            <label class="check-pill"><input type="checkbox" value="Bins in Good Condition"><span>Bins in Good Condition</span></label>
+          </div>
+          <span class="err" data-for="binAvailability"></span>
+        </section>
+
+        <!-- D: Waste Processing -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">D</span>
+            <div><h2>Waste Processing</h2><p class="section-sub">At least one of the below</p></div>
+          </div>
+
+          <div class="check-with-field">
+            <label class="check-pill block"><input type="checkbox" id="compostingCheck"><span>Composting / Capacity (Tonnes)</span></label>
+            <input type="number" id="compostingCapacity" min="0" step="0.01" placeholder="e.g. 0.50" disabled>
+          </div>
+
+          <div class="check-with-field">
+            <label class="check-pill block"><input type="checkbox" id="processingCheck"><span>Processing Facilities, if any</span></label>
+            <input type="text" id="processingDetails" placeholder="Describe facility" disabled>
+          </div>
+
+          <span class="err" data-for="wasteProcessing"></span>
+        </section>
+
+        <!-- E: Storage Area -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">E</span>
+            <div><h2>Storage Area</h2><p class="section-sub">Select all that apply</p></div>
+          </div>
+          <div class="check-grid" data-group="storageArea">
+            <label class="check-pill"><input type="checkbox" value="Dedicated Area"><span>Dedicated Area</span></label>
+            <label class="check-pill"><input type="checkbox" value="Covered"><span>Covered</span></label>
+            <label class="check-pill"><input type="checkbox" value="Clean &amp; Hygienic"><span>Clean &amp; Hygienic</span></label>
+            <label class="check-pill"><input type="checkbox" value="No Odour"><span>No Odour</span></label>
+            <label class="check-pill"><input type="checkbox" value="No Littering"><span>No Littering</span></label>
+          </div>
+          <span class="err" data-for="storageArea"></span>
+        </section>
+
+        <!-- F: IEC Activities -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">F</span>
+            <div><h2>IEC Activities</h2><p class="section-sub">Select all that apply</p></div>
+          </div>
+          <div class="check-grid" data-group="iecActivities">
+            <label class="check-pill"><input type="checkbox" value="Awareness Conducted"><span>Awareness Conducted</span></label>
+            <label class="check-pill"><input type="checkbox" value="Pamphlets Distributed"><span>Pamphlets Distributed</span></label>
+            <label class="check-pill"><input type="checkbox" value="SWM Rules Explained"><span>SWM Rules Explained</span></label>
+            <label class="check-pill"><input type="checkbox" value="Source Segregation Explained"><span>Source Segregation Explained</span></label>
+          </div>
+          <span class="err" data-for="iecActivities"></span>
+        </section>
+
+        <!-- G: Image -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">G</span>
+            <div><h2>Image</h2><p class="section-sub">Optional</p></div>
+          </div>
+          <div class="photo-input" id="photoInput">
+            <img class="photo-preview" id="preview" alt="">
+            <div class="photo-placeholder">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              <span>Add photo</span>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <label class="photo-action-btn" for="imageCamera">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+              Camera
+            </label>
+            <label class="photo-action-btn" for="imageGallery">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L4 19"/></svg>
+              Gallery
+            </label>
+          </div>
+          <input type="file" id="imageCamera" accept="image/*" capture="environment" class="visually-hidden">
+          <input type="file" id="imageGallery" accept="image/*" class="visually-hidden">
+        </section>
+
+        <!-- H: Remarks & IEC Staff -->
+        <section class="card">
+          <div class="section-head">
+            <span class="section-tag">H</span>
+            <div><h2>Remarks &amp; IEC Staff</h2></div>
+          </div>
+          <div class="field">
+            <label for="remarks">Remarks</label>
+            <textarea id="remarks" rows="3" placeholder="Optional"></textarea>
+          </div>
+          <div class="field">
+            <label for="iecStaff">IEC Staff</label>
+            <input type="text" id="iecStaff" readonly class="mono">
+            <span class="hint">Captured automatically from your login.</span>
+          </div>
+        </section>
+
+        </fieldset>
+
+        <div class="submit-bar">
+          <button type="submit" id="submitBtn" class="btn-primary">
+            <span id="submitLabel">Save Entry</span>
+            <span id="submitSpinner" class="spinner" hidden></span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ======= MY ENTRIES ======= -->
+    <section id="view-myEntries" class="tab-view" hidden>
+      <div class="list-toolbar">
+        <h2>My Entries</h2>
+        <button type="button" id="myEntriesRefresh" class="btn-ghost sm">Refresh</button>
+      </div>
+      <div id="myEntriesList" class="entries-list"></div>
+      <div class="pager" id="myEntriesPager"></div>
+    </section>
+
+    <!-- ======= ALL ENTRIES ======= -->
+    <section id="view-allEntries" class="tab-view" hidden>
+      <div class="list-toolbar">
+        <h2>All Entries</h2>
+        <div class="view-toggle" id="allEntriesViewToggle">
+          <button type="button" class="vt-btn active" data-view="table">Table</button>
+          <button type="button" class="vt-btn" data-view="deck">Deck</button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="ss-wrap" id="filterZoneSelect"></div>
+        <input type="date" id="filterDate" class="filter-input">
+        <input type="text" id="filterSearch" class="filter-input" placeholder="Search BWG name…">
+        <button type="button" id="applyFiltersBtn" class="btn-ghost sm">Apply</button>
+        <button type="button" id="resetFiltersBtn" class="btn-ghost sm">Reset</button>
+      </div>
+
+      <div id="allEntriesContainer"></div>
+      <div class="pager" id="allEntriesPager"></div>
+    </section>
+
+    <!-- ======= ADMIN ======= -->
+    <section id="view-admin" class="tab-view" hidden>
+      <div class="card">
+        <div class="section-head">
+          <span class="section-tag">+</span>
+          <div><h2>Create User</h2><p class="section-sub">No complexity rules — keep it simple</p></div>
+        </div>
+        <form id="createUserForm" novalidate>
+          <div class="grid two">
+            <div class="field">
+              <label for="newUsername">Username <span class="req">*</span></label>
+              <input type="text" id="newUsername" required>
+            </div>
+            <div class="field">
+              <label for="newName">Full Name <span class="req">*</span></label>
+              <input type="text" id="newName" required>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label for="newPassword">Password <span class="req">*</span></label>
+              <input type="text" id="newPassword" required>
+            </div>
+            <div class="field">
+              <label for="newRole">Role</label>
+              <select id="newRole">
+                <option value="user" selected>User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+          <span class="err" id="createUserErr"></span>
+          <button type="submit" class="btn-primary sm" id="createUserBtn">Create User</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <span class="section-tag">≡</span>
+          <div><h2>Users</h2></div>
+        </div>
+        <div id="usersTableWrap"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="modalRoot"></div>
+
+<script src="js/api.js"></script>
+<script src="js/searchable-select.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
