@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta
+    name="theme-color"
+    content="#102A43"
+  >
+
+  <title>BWG Inspection & Awareness</title>
+
+  <!-- Google Font -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Application CSS -->
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+</head>
+
+
+<body>
+
+  <!-- =========================================================
+       TOAST
+       ========================================================= -->
+
+  <div
+    id="toastHost"
+    class="toast-host"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================================================
+       LOGIN SCREEN
+       ========================================================= -->
+
+  <section
+    id="loginScreen"
+    class="login-screen"
+  >
+
+    <div class="login-card">
+
+      <div class="login-brand">
+        <div class="login-logo">
+          BW
+        </div>
+
+        <div>
+          <div class="login-brand-title">
+            BWG Inspection
+          </div>
+
+          <div class="login-brand-subtitle">
+            Inspection & Awareness Checklist
+          </div>
+        </div>
+      </div>
+
+
+      <div class="login-heading">
+        <h1>Welcome back</h1>
+
+        <p>
+          Sign in to continue
+        </p>
+      </div>
+
+
+      <div
+        id="connectionStatus"
+        class="connection-status"
+      >
+        <span
+          id="connectionDot"
+          class="connection-dot"
+        ></span>
+
+        <span id="connectionLabel">
+          Checking connection...
+        </span>
+      </div>
+
+
+      <div
+        id="loginMsg"
+        class="form-message hidden"
+      ></div>
+
+
+      <form
+        id="loginForm"
+        autocomplete="on"
+        onsubmit="event.preventDefault(); doLogin();"
+      >
+
+        <div class="form-group">
+
+          <label
+            for="loginUsername"
+            class="required"
+          >
+            Username
+          </label>
+
+          <input
+            type="text"
+            id="loginUsername"
+            name="username"
+            autocomplete="username"
+            placeholder="Enter username"
+            autocapitalize="none"
+            spellcheck="false"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label
+            for="loginPassword"
+            class="required"
+          >
+            Password
+          </label>
+
+          <div class="password-field">
+
+            <input
+              type="password"
+              id="loginPassword"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Enter password"
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword()"
+              aria-label="Show or hide password"
+            >
+              <span id="passwordToggleIcon">
+                👁
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          id="loginBtn"
+          class="btn btn-primary btn-full"
+        >
+          <span id="loginBtnText">
+            Log In
+          </span>
+        </button>
+
+      </form>
+
+
+      <div class="login-footer">
+        BWG Survey Application
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================================================
+       MAIN APPLICATION
+       ========================================================= -->
+
+  <section
+    id="appScreen"
+    class="app-screen hidden"
+  >
+
+
+    <!-- =======================================================
+         TOP BAR
+         ======================================================= -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <div class="app-logo">
+          BW
+        </div>
+
+        <div class="app-title-wrap">
+
+          <div class="app-title">
+            BWG Inspection
+          </div>
+
+          <div class="app-subtitle">
+            Inspection & Awareness
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <div class="user-info">
+
+          <div
+            id="userFullName"
+            class="user-name"
+          >
+            User
+          </div>
+
+          <div
+            id="userRoleBadge"
+            class="role-badge"
+          >
+            User
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="logout-btn"
+          onclick="doLogout()"
+        >
+          <span>↪</span>
+          <span>Logout</span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- =======================================================
+         MAIN CONTENT
+         ======================================================= -->
+
+    <main class="main-container">
+
+
+      <!-- =====================================================
+           PAGE HEADER
+           ===================================================== -->
+
+      <div class="page-header">
+
+        <div>
+
+          <div class="page-eyebrow">
+            BWG SURVEY
+          </div>
+
+          <h1 id="pageTitle">
+            New Inspection
+          </h1>
+
+          <p id="pageSubtitle">
+            Record a Bulk Waste Generator inspection
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =====================================================
+           NEW INSPECTION PAGE
+           ===================================================== -->
+
+      <section
+        id="pageNew"
+        class="page-section"
+      >
+
+
+        <!-- FORM MESSAGE -->
+
+        <div
+          id="formMsg"
+          class="form-message hidden"
+        ></div>
+
+
+
+        <!-- ===================================================
+             GENERAL INFORMATION
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              01
+            </div>
+
+            <div>
+
+              <h2>
+                General Information
+              </h2>
+
+              <p>
+                Basic details of the inspection
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-grid form-grid-2">
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+              <label
+                for="f_entryDate"
+                class="required"
+              >
+                Date
+              </label>
+
+              <input
+                type="date"
+                id="f_entryDate"
+              >
+
+            </div>
+
+
+            <!-- TIME -->
+
+            <div class="form-group">
+
+              <label
+                for="f_entryTime"
+                class="required"
+              >
+                Time
+              </label>
+
+              <input
+                type="time"
+                id="f_entryTime"
+              >
+
+            </div>
+
+
+            <!-- ZONE -->
+
+            <div class="form-group">
+
+              <label
+                for="zoneSearch"
+                class="required"
+              >
+                Zone
+              </label>
+
+              <div
+                id="zoneDropWrap"
+                class="dropdown-wrap"
+              ></div>
+
+            </div>
+
+
+            <!-- WARD -->
+
+            <div class="form-group">
+
+              <label
+                for="wardSearch"
+                class="required"
+              >
+                Ward
+              </label>
+
+              <div
+                id="wardDropWrap"
+                class="dropdown-wrap"
+              ></div>
+
+            </div>
+
+
+          </div>
+
+
+          <!-- BWG NAME -->
+
+          <div class="form-group">
+
+            <label
+              for="f_bwgName"
+              class="required"
+            >
+              BWG Name
+            </label>
+
+            <input
+              type="text"
+              id="f_bwgName"
+              placeholder="Enter Bulk Waste Generator name"
+            >
+
+          </div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="form-group">
+
+            <label
+              for="categoryDropWrap"
+              class="required"
+            >
+              Category
+            </label>
+
+            <div
+              id="categoryDropWrap"
+              class="dropdown-wrap"
+            ></div>
+
+          </div>
+
+
+          <!-- OTHER CATEGORY -->
+
+          <div
+            id="categoryOtherWrap"
+            class="form-group hidden"
+          >
+
+            <label
+              for="f_categoryOther"
+              class="required"
+            >
+              Other — Please specify
+            </label>
+
+            <input
+              type="text"
+              id="f_categoryOther"
+              placeholder="Specify category"
+            >
+
+          </div>
+
+
+          <!-- CONTACT -->
+
+          <div class="form-grid form-grid-2">
+
+            <div class="form-group">
+
+              <label
+                for="f_contactPerson"
+                class="required"
+              >
+                Contact Person
+              </label>
+
+              <input
+                type="text"
+                id="f_contactPerson"
+                placeholder="Contact person name"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label
+                for="f_mobile"
+                class="required"
+              >
+                Mobile
+              </label>
+
+              <input
+                type="tel"
+                id="f_mobile"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="10 digit mobile number"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- UNITS -->
+
+          <div class="form-group">
+
+            <label
+              for="f_unitsCount"
+              class="required"
+            >
+              Units / Residents / Employees
+            </label>
+
+            <input
+              type="text"
+              id="f_unitsCount"
+              placeholder="Enter count"
+            >
+
+          </div>
+
+
+          <!-- WASTE -->
+
+          <div class="form-group">
+
+            <label
+              for="f_approxWasteKg"
+              class="required"
+            >
+              Approx. Waste Generated
+              <span class="label-hint">
+                kg/day
+              </span>
+            </label>
+
+            <input
+              type="number"
+              id="f_approxWasteKg"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="0.00"
+            >
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             WASTE SEGREGATION
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              02
+            </div>
+
+            <div>
+
+              <h2>
+                Waste Segregation
+              </h2>
+
+              <p>
+                Select all applicable observations
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="chkWasteSegregation"
+            class="checkbox-grid"
+          ></div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             BIN AVAILABILITY
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              03
+            </div>
+
+            <div>
+
+              <h2>
+                Bin Availability
+              </h2>
+
+              <p>
+                Select all applicable observations
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="chkBinAvailability"
+            class="checkbox-grid"
+          ></div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             WASTE PROCESSING
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              04
+            </div>
+
+            <div>
+
+              <h2>
+                Waste Processing
+              </h2>
+
+              <p>
+                Processing and composting details
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              for="f_compostingCapacity"
+              class="required"
+            >
+              Composting / Capacity
+              <span class="label-hint">
+                Tonnes
+              </span>
+            </label>
+
+            <input
+              type="number"
+              id="f_compostingCapacity"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="0.00"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label
+              for="f_processingFacilities"
+              class="required"
+            >
+              Processing Facilities, if any
+            </label>
+
+            <input
+              type="text"
+              id="f_processingFacilities"
+              placeholder="Enter details"
+            >
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             STORAGE AREA
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              05
+            </div>
+
+            <div>
+
+              <h2>
+                Storage Area
+              </h2>
+
+              <p>
+                Select all applicable observations
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="chkStorageArea"
+            class="checkbox-grid"
+          ></div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             IEC ACTIVITIES
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              06
+            </div>
+
+            <div>
+
+              <h2>
+                IEC Activities
+              </h2>
+
+              <p>
+                Select all activities completed
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="chkIecActivities"
+            class="checkbox-grid"
+          ></div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             REMARKS / PHOTO
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              07
+            </div>
+
+            <div>
+
+              <h2>
+                Remarks & Documentation
+              </h2>
+
+              <p>
+                Additional information and optional photo
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- REMARKS -->
+
+          <div class="form-group">
+
+            <label for="f_remarks">
+              Remarks
+              <span class="label-hint">
+                Optional
+              </span>
+            </label>
+
+            <textarea
+              id="f_remarks"
+              rows="4"
+              placeholder="Enter any additional observations..."
+            ></textarea>
+
+          </div>
+
+
+          <!-- IEC STAFF -->
+
+          <div class="form-group">
+
+            <label
+              for="f_iecStaffName"
+              class="required"
+            >
+              IEC Staff Name / Signature
+            </label>
+
+            <input
+              type="text"
+              id="f_iecStaffName"
+              readonly
+            >
+
+            <div class="field-help">
+              Automatically filled with your logged-in name.
+            </div>
+
+          </div>
+
+
+          <!-- PHOTO -->
+
+          <div class="form-group">
+
+            <label for="f_imageFile">
+
+              Photo
+
+              <span class="label-hint">
+                Optional
+              </span>
+
+            </label>
+
+
+            <input
+              type="file"
+              id="f_imageFile"
+              accept="image/*"
+              capture="environment"
+              onchange="handleImageSelect(event)"
+              class="file-input"
+            >
+
+
+            <div class="field-help">
+              You can take a photo or select one from the gallery.
+            </div>
+
+
+            <div
+              id="imageUploadStatus"
+              class="image-status"
+            ></div>
+
+
+            <div
+              id="imagePreviewWrap"
+              class="image-preview-wrap hidden"
+            >
+
+              <img
+                id="imagePreview"
+                class="image-preview"
+                alt="Selected inspection photo"
+              >
+
+              <button
+                type="button"
+                class="remove-image-btn"
+                onclick="removeSelectedImage()"
+              >
+                Remove Photo
+              </button>
+
+            </div>
+
+
+            <input
+              type="hidden"
+              id="f_imageUrl"
+            >
+
+          </div>
+
+
+          <!-- FORM ACTIONS -->
+
+          <div class="form-actions">
+
+            <button
+              type="button"
+              id="submitBtn"
+              class="btn btn-primary"
+              onclick="submitEntry()"
+            >
+              <span id="submitBtnText">
+                Submit Inspection
+              </span>
+            </button>
+
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="resetForm()"
+            >
+              Clear Form
+            </button>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- =====================================================
+           INSPECTION LOGS PAGE
+           ===================================================== -->
+
+      <section
+        id="pageLogs"
+        class="page-section hidden"
+      >
+
+
+        <div class="card">
+
+          <div class="logs-toolbar">
+
+            <div>
+
+              <h2>
+                Inspection Logs
+              </h2>
+
+              <p>
+                Common inspection records submitted by all users
+              </p>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="btn btn-secondary btn-small"
+              onclick="loadInspectionLogs(1)"
+            >
+              ↻ Refresh
+            </button>
+
+          </div>
+
+
+          <!-- LOG SUMMARY -->
+
+          <div
+            id="logsSummary"
+            class="logs-summary"
+          ></div>
+
+
+          <!-- LOG GROUPS -->
+
+          <div
+            id="allList"
+            class="logs-container"
+          ></div>
+
+
+          <!-- PAGINATION -->
+
+          <div
+            id="allPager"
+            class="pagination"
+          ></div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           ADMIN PAGE
+           ===================================================== -->
+
+      <section
+        id="pageAdmin"
+        class="page-section hidden"
+      >
+
+
+        <!-- ===================================================
+             CREATE USER
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              A1
+            </div>
+
+            <div>
+
+              <h2>
+                Create User
+              </h2>
+
+              <p>
+                Add a new application user
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="adminMsg"
+            class="form-message hidden"
+          ></div>
+
+
+          <div class="form-grid form-grid-2">
+
+
+            <div class="form-group">
+
+              <label
+                for="a_username"
+                class="required"
+              >
+                Username
+              </label>
+
+              <input
+                type="text"
+                id="a_username"
+                placeholder="Username"
+                autocapitalize="none"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label
+                for="a_fullName"
+                class="required"
+              >
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                id="a_fullName"
+                placeholder="Full name"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label
+                for="a_password"
+                class="required"
+              >
+                Password
+              </label>
+
+              <input
+                type="password"
+                id="a_password"
+                placeholder="Password"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label
+                for="a_role"
+                class="required"
+              >
+                Role
+              </label>
+
+              <select id="a_role">
+
+                <option value="User">
+                  User
+                </option>
+
+                <option value="Admin">
+                  Admin
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-actions">
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="adminCreateUser()"
+            >
+              Create User
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             USER LIST
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="logs-toolbar">
+
+            <div>
+
+              <h2>
+                Users
+              </h2>
+
+              <p>
+                Manage application users
+              </p>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="btn btn-secondary btn-small"
+              onclick="loadAdminUsers()"
+            >
+              ↻ Refresh
+            </button>
+
+          </div>
+
+
+          <div
+            id="adminUsersTable"
+            class="admin-table-wrap"
+          ></div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             ADD ZONE / WARD
+             =================================================== -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="section-icon">
+              A2
+            </div>
+
+            <div>
+
+              <h2>
+                Add Zone / Ward
+              </h2>
+
+              <p>
+                Add a new Zone and Ward combination
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-grid form-grid-2">
+
+
+            <div class="form-group">
+
+              <label
+                for="a_zone"
+                class="required"
+              >
+                Zone
+              </label>
+
+              <input
+                type="text"
+                id="a_zone"
+                placeholder="Zone"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label
+                for="a_ward"
+                class="required"
+              >
+                Ward
+              </label>
+
+              <input
+                type="text"
+                id="a_ward"
+                placeholder="Ward"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="form-actions">
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="adminAddZoneWard()"
+            >
+              Add Zone / Ward
+            </button>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+    </main>
+
+
+
+    <!-- =======================================================
+         DESKTOP / MOBILE NAVIGATION
+         ======================================================= -->
+
+    <nav class="bottom-nav">
+
+
+      <button
+        type="button"
+        id="navNewBtn"
+        class="nav-item active"
+        onclick="switchPage('new')"
+      >
+
+        <span class="nav-icon">
+          ✚
+        </span>
+
+        <span>
+          New
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        id="navLogsBtn"
+        class="nav-item"
+        onclick="switchPage('logs')"
+      >
+
+        <span class="nav-icon">
+          ☷
+        </span>
+
+        <span>
+          Logs
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        id="navAdminBtn"
+        class="nav-item hidden"
+        onclick="switchPage('admin')"
+      >
+
+        <span class="nav-icon">
+          ⚙
+        </span>
+
+        <span>
+          Admin
+        </span>
+
+      </button>
+
+
+    </nav>
+
+
+  </section>
+
+
+  <!-- =========================================================
+       APPLICATION JAVASCRIPT
+       ========================================================= -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
