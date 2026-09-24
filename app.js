@@ -389,7 +389,7 @@ async function checkConnection() {
       dot.className = 'conn-dot ok';
 
       label.textContent =
-        'Connected to Google Apps Script';
+        'Connected with Server';
 
       return true;
     }
