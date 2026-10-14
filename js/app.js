@@ -194,8 +194,26 @@ async function refreshZoneMapInBackground(){
   }catch(e){ /* offline or slow — cached data already shown, ignore */ }
 }
 
+
 function updateEntryDateTime(){
-  $('entryDateTime').value = new Date().toLocaleString();
+  const now = new Date();
+
+  const date = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'Asia/Kolkata'
+  }).format(now).replace(/ /g, '-');
+
+  const time = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+    timeZone: 'Asia/Kolkata'
+  }).format(now);
+
+  $('entryDateTime').value = `${date} ${time}`;
 }
 
 /* ============================================================
